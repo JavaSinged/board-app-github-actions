@@ -75,10 +75,11 @@ jobs:
             kubectl rollout restart deployment/backend-deployment
             kubectl rollout restart deployment/frontend-deployment
 
-      - name: 배포 성공 알림
-        if: success()
-        run: echo "배포 성공! 커밋: ${{ github.sha }}"
-
-      - name: 배포 실패 알림
-        if: failure()
-        run: echo "배포 실패! GitHub Actions 로그를 확인하세요."
+            - name: 배포 결과 출력
+            if: always()
+            run: |
+              if [ "${{ job.status }}" = "success" ]; then
+                echo "배포 성공! 커밋: ${{ github.sha }}"
+              else
+                echo "배포 실패! GitHub Actions 로그를 확인하세요."
+              fi
